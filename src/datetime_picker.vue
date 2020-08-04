@@ -1,7 +1,37 @@
 <template>
   <div :style='{width:width}' class="datetime-picker"  v-on:click='calendarClicked($event)'  v-on:blur='toggleCal' >
     <div>
-      <input type='text' :readonly="readonly" id='tj-datetime-input' :required="required" :value="date"  :name='name' v-on:click='toggleCal' autocomplete='off'  />
+      <div
+        class="datetime-wrap-content"
+        v-on:click='toggleCal'
+      >
+        <input
+          type='text'
+          :readonly="readonly"
+          :id="'tj-datetime-input-' + index"
+          :required="required"
+          :value="date"
+          :name='name'
+          autocomplete='off'
+          :disabled="true"
+          class="datetime-input"
+          :class="{
+            'only-left': position === 'left',
+            'only-right': position === 'right',
+            'hide': position !== 'right' && position !== 'left',
+          }"
+        />
+        <div
+          class="datetime-icon-cal"
+          :class="{
+            'only-left': position === 'left',
+            'only-right': position === 'right',
+            'hide': position !== 'right' && position !== 'left',
+          }"
+        >
+          <svg data-v-4b4a5c81="" data-v-31c8dc2f="" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="calendar-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-calendar-alt fa-w-14"><path data-v-4b4a5c81="" data-v-31c8dc2f="" fill="currentColor" d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z" class=""></path></svg>
+        </div>
+      </div>
       <div class='calender-div' :class='{noDisplay: hideCal}'>
         <div :class='{noDisplay: hideDate}'>
           <div class='year-month-wrapper'>
@@ -98,6 +128,14 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    index: {
+      type: Number,
+      default: 0,
+    },
+    position: {
+      type: String,
+      default: '',
     },
     firstDayOfWeek: {
       default: 0,
@@ -283,7 +321,7 @@ export default {
       }
     },
     documentClicked (event) {
-      if (event.target.id !== 'tj-datetime-input') {
+      if (event.target.id !== 'tj-datetime-input-' + this.index) {
         this.hideCal = true
       }
     },
@@ -692,5 +730,30 @@ export default {
     margin-top: 10px;
     cursor: pointer;
     background: transparent;
+  }
+  .datetime-wrap-content {
+    position: relative;
+    cursor: pointer;
+  }
+  .datetime-input.only-left {
+    padding-left: 40px !important;
+  }
+  .datetime-input.only-right {
+    padding-right: 40px !important;
+  }
+  .datetime-icon-cal {
+    position: absolute;
+    opacity: 0.8;
+  }
+  .datetime-icon-cal.only-left {
+    left: 15px;
+    top: 8px;
+  }
+  .datetime-icon-cal.only-right {
+    right: 15px;
+    top: 8px;
+  }
+  .datetime-icon-cal.hide {
+    display: none;
   }
 </style>
