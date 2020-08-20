@@ -1,6 +1,7 @@
 <template>
   <div :style='{width:width}' class="datetime-picker"  v-on:click='calendarClicked($event)'  v-on:blur='toggleCal' >
     <div>
+      <div v-if="enableForceClear" :id="'dt-force-clear-' + index" class="datetime-picker-force-clear" v-on:click="clearDate" />
       <div
         class="datetime-wrap-content"
         v-on:click='toggleCal'
@@ -121,6 +122,10 @@ export default {
       type: String,
       default: ""
     },
+    initialValue: {
+      type: String,
+      default: ""
+    },
     required: {
       type: Boolean,
       default: false
@@ -136,6 +141,10 @@ export default {
     position: {
       type: String,
       default: '',
+    },
+    enableForceClear: {
+      type: Boolean,
+      default: false,
     },
     firstDayOfWeek: {
       default: 0,
@@ -417,6 +426,10 @@ export default {
       return date
     },
     clearDate(){
+      if (this.initialValue) {
+        this.value = this.initialValue
+        return
+      }
       this.date = ''
       this.$emit('input', '')
       this.toggleCal ()
